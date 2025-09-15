@@ -15,13 +15,30 @@ const MailingAddress = () => {
     formState: { errors },
   } = useFormContext();
 
-  const { isLoaded } = useGoogleMap();
+  const { isLoaded, loadError } = useGoogleMap();
 
   // Type assertion for nested mailing_address errors
   const mailingAddressErrors = errors.mailing_address as any;
 
+  if (loadError) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="text-red-600 text-center py-8">
+          Error loading Google Maps. Please refresh the page and try again.
+        </div>
+      </div>
+    );
+  }
+
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          Loading Google Maps...
+        </div>
+      </div>
+    );
   }
   return (
     <div className="bg-white rounded-xl shadow-sm p-6" id="mailing-address">

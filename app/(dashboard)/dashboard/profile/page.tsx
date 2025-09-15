@@ -21,46 +21,47 @@ const ProfileContent = () => {
 
   return (
     <div className="">
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="flex flex-col gap-6">
-            <SummaryCard />
+      <div className="flex flex-col gap-6">
+        <SummaryCard />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div className="col-span-1 lg:col-span-8 flex flex-col gap-6">
-                {/* Personal Information */}
-                <PersonalInfo />
+        <div className="flex flex-col gap-6">
+          <div className="col-span-1 lg:col-span-7">
+            <FormProvider {...methods}>
+              <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <div className=" flex flex-col gap-6">
 
-                {/* Mailing Address */}
-                <MailingAddress />
+            {/* Certifications */}
+            <Certifications />
+                  {/* Personal Information */}
+                  <PersonalInfo />
 
-                {/* Emergency Contact */}
-                <EmergencyContact />
+                  {/* Mailing Address */}
+                  <MailingAddress />
 
-                <SocialMediaForm />
-              </div>
-              <div className="col-span-1 lg:col-span-4">
-                {/* Certifications */}
-                <Certifications />
-              </div>
-            </div>
+                  {/* Emergency Contact */}
+                  <EmergencyContact />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div className="col-span-1 lg:col-span-8">
-                <div className="flex justify-end gap-4  py-3  rounded-sm sticky bottom-0 w-full z-10">
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    loading={updatingProfile}
-                  >
-                    {"Save"}
-                  </Button>
+                  <SocialMediaForm />
+
+                  {/* Sticky Save Button - Fixed at bottom */}
+                  <div className="sticky bottom-0 bg-white shadow-sm border-gray-200 py-4 px-6 mt-6 z-10">
+                    <div className="flex justify-end gap-4">
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        size="large"
+                        loading={updatingProfile}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </form>
+            </FormProvider>
           </div>
-        </form>
-      </FormProvider>
+        </div>
+      </div>
     </div>
   );
 };

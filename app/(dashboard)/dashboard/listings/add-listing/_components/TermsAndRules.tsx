@@ -39,15 +39,32 @@ const TermsAndRules: React.FC = () => {
     formState: { errors },
   } = useFormContext(); // Access form context
 
-  const { data: cancellationPolicyList } = useApiGet({
-    endpoint: `/cancellation-policy`,
-    queryKey: ["cancellation-policy"],
-    config: {
-      select: (data: any) => {
-        return data?.data?.data;
+  // const { data: cancellationPolicyList } = useApiGet({
+  //   endpoint: `/cancellation-policy`,
+  //   queryKey: ["cancellation-policy"],
+  //   config: {
+  //     select: (data: any) => {
+  //       return data?.data?.docs;
+  //     },
+  //   },
+  // });
+
+    const { data: cancellationPolicyList, refetch } = useApiGet({
+      endpoint: `/stay/cancellation-policy`,
+      queryKey: ["cancellation-policy"],
+      config: {
+        select: (data: any) =>
+          data?.data?.docs?.map((item: any) => ({
+            id: item.id,
+            title: item.name,
+            type: item.type === 1 ? "long" : "short",
+            before: item.before_check_in,
+            after: item.after_check_in,
+          })) || [],
       },
-    },
-  });
+    });
+
+    console.log("cancellationPolicyList", cancellationPolicyList);
 
   const smokingAllowed = watch("smoking_allowed");
   const rulesPetAllowed = watch("rules_pet_allowed");
@@ -104,7 +121,7 @@ const TermsAndRules: React.FC = () => {
                       )
                       ?.map((option: CancellationPolicy) => (
                         <Option key={option.id} value={option.id}>
-                          {option.group_name}: {option.before_check_in}
+                          {option.title} : {option.after}
                         </Option>
                       ))
                   ) : (
@@ -149,7 +166,7 @@ const TermsAndRules: React.FC = () => {
                     )
                     ?.map((option: CancellationPolicy) => (
                       <Option key={option.id} value={option.id}>
-                        {option.group_name}: {option.before_check_in}
+                        {option.name}: {option.before}
                       </Option>
                     ))}
                 </Select>

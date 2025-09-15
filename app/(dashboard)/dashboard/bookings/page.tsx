@@ -67,6 +67,8 @@ const BookingPage = () => {
   const { data: session } = useSession();
   const { message: appMessage } = useApp();
 
+  console.log("session", session?.user?.role)
+
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedBooking, setSelectedBooking] = useState<BookingListing | null>(null);
   const [open, setOpen] = useState(true);
@@ -149,86 +151,99 @@ const BookingPage = () => {
   };
 
   // MRT Columns
-  const mrtColumns: MRT_ColumnDef<BookingListing>[] = [
-    {
-      accessorKey: "id",
-      header: "ID",
-      size: 80,
-      Cell: ({ cell }) => <span className="font-medium">#{cell.getValue<number>()}</span>,
-    },
-    {
-      accessorKey: "listing.host.display_name",
-      header: "Host",
-      size: 120,
-    },
-    {
-      accessorKey: "guest.display_name",
-      header: "Guest",
-      size: 120,
-    },
-    {
-      accessorKey: "listing.title",
-      header: "Listing Title",
-      size: 200,
-      Cell: ({ cell }) => (
-        <Tooltip title={cell.getValue<string>()}>
-          <span className="truncate block max-w-xs">{cell.getValue<string>()}</span>
-        </Tooltip>
-      ),
-    },
-    {
-      accessorKey: "arrival_date",
-      header: "Check In",
-      size: 120,
-      Cell: ({ cell }) => new Date(cell.getValue<string>()).toLocaleDateString(),
-    },
-    {
-      accessorKey: "departure_date",
-      header: "Check Out",
-      size: 120,
-      Cell: ({ cell }) => new Date(cell.getValue<string>()).toLocaleDateString(),
-    },
-    {
-      accessorKey: "amount",
-      header: "Rent",
-      size: 100,
-      Cell: ({ cell }) => <span className="text-green-600 font-semibold">${parseFloat(cell.getValue<string>() || "0").toFixed(2)}</span>,
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      size: 120,
-      Cell: ({ cell, row }) => (
-        <Badge status={getStatusColor(cell.getValue<number>(), row.original.is_disable) as any} text={getStatusText(cell.getValue<number>(), row.original.is_disable)} />
-      ),
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      size: 100,
-      Cell: ({ row }) => (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: "view",
-                label: (
-                  <Space>
-                    <EyeOutlined /> View Booking
-                  </Space>
-                ),
-                onClick: () => router.push(`/dashboard/bookings/${row.original.id}`),
-              },
-            ],
-          }}
-          trigger={["click"]}
-          placement="bottomRight"
-        >
-          <Button type="text" icon={<MoreOutlined />} className="hover:bg-gray-100" />
-        </Dropdown>
-      ),
-    },
-  ];
+// MRT Columns
+const mrtColumns: MRT_ColumnDef<BookingListing>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+    size: 80,
+    Cell: ({ cell }) => <span className="font-medium">#{cell.getValue<number>()}</span>,
+  },
+  ...(!session?.user?.role?.includes("admin")
+    ? [
+        {
+          accessorKey: "listing.host.display_name",
+          header: "Host",
+          size: 120,
+        } as MRT_ColumnDef<BookingListing>,
+      ]
+    : []),
+  {
+    accessorKey: "guest.display_name",
+    header: "Guest",
+    size: 120,
+  },
+  {
+    accessorKey: "listing.title",
+    header: "Listing Title",
+    size: 200,
+    Cell: ({ cell }) => (
+      <Tooltip title={cell.getValue<string>()}>
+        <span className="truncate block max-w-xs">{cell.getValue<string>()}</span>
+      </Tooltip>
+    ),
+  },
+  {
+    accessorKey: "arrival_date",
+    header: "Check In",
+    size: 120,
+    Cell: ({ cell }) => new Date(cell.getValue<string>()).toLocaleDateString(),
+  },
+  {
+    accessorKey: "departure_date",
+    header: "Check Out",
+    size: 120,
+    Cell: ({ cell }) => new Date(cell.getValue<string>()).toLocaleDateString(),
+  },
+  {
+    accessorKey: "amount",
+    header: "Rent",
+    size: 100,
+    Cell: ({ cell }) => (
+      <span className="text-green-600 font-semibold">
+        ${parseFloat(cell.getValue<string>() || "0").toFixed(2)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    size: 120,
+    Cell: ({ cell, row }) => (
+      <Badge
+        status={getStatusColor(cell.getValue<number>(), row.original.is_disable) as any}
+        text={getStatusText(cell.getValue<number>(), row.original.is_disable)}
+      />
+    ),
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    size: 100,
+    Cell: ({ row }) => (
+      <Dropdown
+        menu={{
+          items: [
+            {
+              key: "view",
+              label: (
+                <Space>
+                  <EyeOutlined /> View Booking
+                </Space>
+              ),
+              onClick: () => router.push(`/dashboard/bookings/${row.original.id}`),
+            },
+          ],
+        }}
+        trigger={["click"]}
+        placement="bottomRight"
+      >
+        <Button type="text" icon={<MoreOutlined />} className="hover:bg-gray-100" />
+      </Dropdown>
+    ),
+  },
+];
+
 
   const filteredData = bookingData?.filter((booking: BookingListing) => {
     if (selectedStatus === "all") return true;

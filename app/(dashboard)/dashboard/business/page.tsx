@@ -58,10 +58,10 @@ const BusinessPage = () => {
     isLoading,
     refetch,
   } = useApiGet({
-    endpoint: `/business/${business_id}`,
-    queryKey: ["business", business_id],
+    endpoint: `/business`,
+    queryKey: ["business"],
     config: {
-      select: (res) => res?.data?.doc || null,
+      select: (res) => res?.data?.docs || null,
     },
   });
 

@@ -1280,10 +1280,10 @@ export const addListingValidationSchema = yup.object().shape({
   zipcode: yup.string().required("ZIP / Postal Code is required."),
   area: yup.string().notRequired().nullable(),
   country: yup.string().required("Country is required."),
-  longitude: yup.string().required("Longitude is required."),
-  latitude: yup.string().required("Latitude is required."),
-  lng: yup.number().required("Longitude is required."),
-  lat: yup.number().required("Latitude is required."),
+  // longitude: yup.string().required("Longitude is required."),
+  // latitude: yup.string().required("Latitude is required."),
+  lng: yup.number().optional("Longitude is required."),
+  lat: yup.number().optional("Latitude is required."),
 
   // Media Section
   images: yup

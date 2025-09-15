@@ -33,6 +33,7 @@ import {
   addBusinessDefaultValues,
   addBusinessValidationSchema,
 } from "@/constants/business";
+import useAxiosAuth from "@/hooks/use-axios-auth";
 
 // Validation schema for the stays form
 
@@ -40,7 +41,7 @@ const BusinessForm = () => {
   const router = useRouter();
   const { message } = useApp();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const axiosAuth = useAxiosAuth()
   // Create form with validation
   const methods = useForm({
     mode: "onChange",
@@ -56,6 +57,11 @@ const BusinessForm = () => {
   const { mutate: addBusiness, isPending: savingBusiness } = useApiMutation({
     endpoint: "/business",
     method: "post",
+    axiosConfig:{
+      headers:{
+         'Content-Type': 'multipart/form-data'
+      }
+    },
     config: {
       onSuccess: () => {
         message.success("Booking created successfully!");
@@ -71,7 +77,9 @@ const BusinessForm = () => {
   const onSubmit = useCallback(
     async (formValues: any) => {
 
-        const businessPayload = {
+  console.log("formValues.photo_images", formValues.photo_images)
+
+  const businessPayload = {
   name: formValues.name,
   address: {
     country: formValues.country,
@@ -89,7 +97,7 @@ const BusinessForm = () => {
   images: formValues.photo_images,
   logo: formValues.logo_image,
   business_type: formValues.type,
-  description: formValues.description,
+  description: formValues.business_details,
   tagline: formValues.tag_line,
   phone: formValues.phone,
   airport: formValues.airport,
@@ -106,10 +114,10 @@ const BusinessForm = () => {
 };
       try {
         setIsSubmitting(true);
+        // axiosAuth.postForm('/business',formValues)
         addBusiness(businessPayload);
         console.log("formValues", formValues);
         console.log("businessPayload", businessPayload);
-        console.log("Submitting form with values:", formValues?.type);
       } catch (error) {
         console.error("Error submitting form:", error);
         message.error("An error occurred while submitting the form");s

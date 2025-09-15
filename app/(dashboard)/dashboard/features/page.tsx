@@ -7,6 +7,7 @@ import { useApiGet } from "@/http-service";
 import { useState } from "react";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { MaterialReactTable, MRT_ColumnDef } from "material-react-table";
+import { features } from "process";
 
 interface DataType {
   id: string;
@@ -18,7 +19,6 @@ export default function Features() {
   const router = useRouter();
   const [open, setOpen] = useState(true);
 
-  // ✅ Correct MRT Columns
   const mrtColumns: MRT_ColumnDef<DataType>[] = [
     {
       accessorKey: "id",
@@ -71,31 +71,38 @@ export default function Features() {
               <EditOutlined />
             </button>
 
-            <button
+            {/* <button
               onClick={() => console.log("Delete feature:", record.id)}
               className="px-3 py-2 rounded-full border border-red-500 text-red-500 hover:bg-red-50"
             >
               <DeleteOutlined />
-            </button>
+            </button> */}
           </div>
         );
       },
     },
   ];
 
-  // ✅ Fetch API
-  const { data: getFeatures, isLoading } = useApiGet({
+  const { data: getFeatures, isLoading,isError } = useApiGet({
     endpoint: `/stay/feature-sub_features`,
     queryKey: ["stay/feature-sub_features"],
   });
 
-  // ✅ Transform Data
   const tableData: DataType[] =
     getFeatures?.features?.map((feature: any) => ({
       id: feature.id,
       feature: feature.name,
       subfeature: feature.sub_features.map((sub: any) => sub.name),
     })) || [];
+
+    const mainFeatures:Array<{name:string,id:string}> = []
+
+    if(!isLoading && !isError){
+      getFeatures.features?.forEach(({name,id} : {name:string,id:string}) => {
+        mainFeatures.push({name,id})
+      })
+      console.log('MAIN___FEATURE ::: ',mainFeatures)
+    }
 
   return (
     <div className="min-h-screen bg-white p-6">

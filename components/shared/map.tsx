@@ -64,13 +64,19 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
 export default function GoogleMapComponent({
   height,
   mapClasses,
+  stayMark
 }: {
   height: string;
   mapClasses?: any;
+  stayMark: boolean;
 }) {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDXJS_VZMhnp0szh92aZGg8RHszz6RMQN8",
-  });
+const { isLoaded, loadError } = useLoadScript({
+  googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!,
+  libraries: ["places"],
+});
+
+console.log("stay marlk", stayMark)
+
   const [selectedStay, setSelectedStay] = useState<any>(null);
   // Basic map options, minimal to just get a map
   const mapOptions = useMemo(
@@ -111,6 +117,8 @@ export default function GoogleMapComponent({
         mapContainerClassName={`w-full h-full cursor-grab active:cursor-grabbing ${mapClasses}`}
         options={mapOptions}
       >
+        {stayMark === false &&(
+          <div>
         {stays.map((stay) => (
           <CustomMarker
             key={stay.id}
@@ -120,6 +128,8 @@ export default function GoogleMapComponent({
             isSelected={selectedStay?.id === stay.id}
           />
         ))}
+        </div>
+        )}
 
         {/* Marker if selected */}
         {selectedStay && (
@@ -129,9 +139,8 @@ export default function GoogleMapComponent({
               lat: selectedStay.lat,
               lng: selectedStay.lng,
             }}
-            options={{
-              pixelOffset: new window.google.maps.Size(0, -30),
-            }}
+             options={isLoaded ? { pixelOffset: new window.google.maps.Size(0, -30) } : {}}
+
             // onCloseClick={() => setSelectedStay(null)}
           >
             <div className="relative w-80 overflow-hidden bg-white rounded-xl shadow-xl border border-gray-100 h-[270px]">

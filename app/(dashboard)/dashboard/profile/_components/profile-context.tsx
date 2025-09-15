@@ -43,6 +43,7 @@ interface ProfileContextType {
 
   // Form data
   defaultValues: any;
+  documentStatuses: any;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -51,6 +52,16 @@ interface ProfileProviderProps {
   children: ReactNode;
 }
 
+type DocumentStatus =
+  | "not-submitted"
+  | "under-review"
+  | "rejected"
+  | "verified";
+interface DocumentSection {
+  status: DocumentStatus;
+  lastUpdated?: string;
+  adminNotes?: string;
+}
 export const ProfileProvider: React.FC<ProfileProviderProps> = ({
   children,
 }) => {
@@ -61,11 +72,27 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
   const [profileStatus, setProfileStatus] = useState<
     "incomplete" | "in-review" | "verified"
   >("verified");
+
+  // Mock status data - in real app this would come from API
+  const [documentStatuses, setDocumentStatuses] = useState<{
+    airmen: DocumentSection;
+    driver: DocumentSection;
+  }>({
+    airmen: {
+      status: "under-review",
+      lastUpdated: "2024-01-15",
+      adminNotes:
+        "Front certificate looks good. Back certificate needs better image quality.",
+    },
+    driver: {
+      status: "not-submitted",
+    },
+  });
   const defaultValues = {
     image: "",
     first_name: undefined,
     last_name: undefined,
-    user_name: undefined,
+    middle_name: undefined,
     display_name: undefined,
     native_language: undefined,
     other_language: [],
@@ -105,6 +132,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
 
   const profileSchema = yup.object().shape({
     first_name: yup.string().nullable().optional(),
+    middle_name: yup.string().nullable().optional(),
     last_name: yup.string().nullable().optional(),
     display_name: yup
       .string()
@@ -128,7 +156,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
         function (value) {
           if (!value) return true; // Allow empty values
 
-          const { first_name, last_name, user_name } = this.parent;
+          const { first_name, last_name } = this.parent;
           const normalizedValue = value.toLowerCase().trim();
 
           // Check if display name contains other names or vice versa
@@ -146,18 +174,10 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
           ) {
             return false;
           }
-          if (
-            user_name &&
-            (normalizedValue.includes(user_name.toLowerCase().trim()) ||
-              user_name.toLowerCase().trim().includes(normalizedValue))
-          ) {
-            return false;
-          }
 
           return true;
         }
       ),
-    user_name: yup.string().nullable().optional(),
     native_language: yup.string().nullable().optional(),
     other_language: yup.array().of(yup.string()).nullable().optional(),
 
@@ -289,8 +309,11 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
     handleSubmit,
     setValue,
     reset,
+    getValues,
     formState: { errors, isValid },
   } = methods;
+
+  console.log({ errors }, getValues());
 
   const { data: userData, isLoading: loadingUserData } = useApiGet({
     endpoint: `/me`,
@@ -303,26 +326,42 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
       },
     },
   });
-  console.log({ userData });
   useEffect(() => {
     if (userData) {
-      setProfileComplete(userData?.complete_percentage);
-      setProfileStatus(userData?.status || "incompleted");
+      const { user_name, ...data } = userData || {};
+      setProfileComplete(data?.complete_percentage);
+      setProfileStatus(data?.profile_status || "incomplete");
+      setDocumentStatuses({
+        airmen: {
+          status: !data?.airmen_certificate_front
+            ? "not-submitted"
+            : data?.airmen_verified
+            ? "verified"
+            : "under-review",
+        },
+        driver: {
+          status: !data?.driving_license_front
+            ? "not-submitted"
+            : data?.driving_license_verified
+            ? "verified"
+            : "under-review",
+        },
+      });
       reset({
-        email: userData?.email,
+        email: data?.email,
         first_name: userData?.first_name,
         last_name: userData?.last_name,
+        middle_name: userData?.middle_name,
         display_name: userData?.display_name,
-        user_name: userData?.user_name,
-        native_language: userData?.native_language,
-        other_language: userData?.other_language,
-        phone: userData?.phone,
-        other_phone: userData?.other_phone,
-        additional_email: userData?.additional_email,
-        bio: userData?.bio,
-        mailing_address: userData?.mailing_address,
-        contact: userData?.contact,
-        social_links: userData?.social_links,
+        native_language: data?.native_language,
+        other_language: data?.other_language,
+        phone: data?.phone,
+        other_phone: data?.other_phone,
+        additional_email: data?.additional_email,
+        bio: data?.bio,
+        mailing_address: data?.mailing_address,
+        contact: data?.contact,
+        social_links: data?.social_links,
       });
     }
   }, [userData, reset]);
@@ -349,6 +388,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
   const onSubmit = useCallback(
     async (values: any, event: any) => {
       event.preventDefault();
+      console.log({ values });
       const {
         air_men,
         air_men_back,
@@ -384,6 +424,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
     onSubmit,
     onError,
     defaultValues,
+    documentStatuses,
   };
 
   return (

@@ -63,6 +63,7 @@ const ListingPage = () => {
     async (formValues: any) => {
       try {
         setIsSubmitting(true);
+        console.log("stay payload", formValues)
         saveStay(formValues);
       } catch (error) {
         console.error("Error submitting form:", error);

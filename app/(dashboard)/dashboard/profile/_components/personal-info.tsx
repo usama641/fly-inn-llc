@@ -1,11 +1,9 @@
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { Input, Select, Form, Tooltip } from "antd";
+import { Input, Select, Form } from "antd";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { languageOptions } from "@/constants/profile";
-import { CiCircleQuestion } from "react-icons/ci";
-
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -26,7 +24,7 @@ const PersonalInfo = () => {
       <h2 className="flex items-center text-xl font-bold text-gray-800 mb-6">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 text-red-600 mr-2" 
+          className="h-5 w-5 text-red-600 mr-2"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -39,7 +37,7 @@ const PersonalInfo = () => {
         Personal Information
       </h2>
 
-      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* First Name */}
         <div className="flex flex-col justify-between">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -75,18 +73,16 @@ const PersonalInfo = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Middle Name
           </label>
-          <p className="text-sm text-gray-500 mb-3">
-            Your legal middle name as it appears on official documents
-          </p>
+          <p className="text-sm text-gray-500 mb-3">Your middle name/surname</p>
           <Controller
-            name="user_name"
+            name="middle_name"
             control={control}
             render={({ field }) => (
               <div>
                 <Input
                   {...field}
                   size="large"
-                  placeholder="johnflyer123"
+                  placeholder="Doe"
                   status={errors.middle_name ? "error" : ""}
                   className="w-full"
                 />
@@ -100,13 +96,13 @@ const PersonalInfo = () => {
           />
         </div>
 
-                {/* Last Name */}
+        {/* Last name */}
         <div className="flex flex-col justify-between">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Last Name
           </label>
           <p className="text-sm text-gray-500 mb-3">
-            Your legal last name/surname as it appears on official documents
+            Your legal last name/surname
           </p>
           <Controller
             name="last_name"
@@ -130,14 +126,10 @@ const PersonalInfo = () => {
           />
         </div>
 
-
         {/* Display Name */}
         <div className="flex flex-col justify-between">
-          <label className="flex item-cneter gap-1 block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Display Name
-            <Tooltip title="This cannot be the same or contain any part of your name or email address. Please omit any identifying info such as tail numbers, contact info, websites, etc.">
-              <CiCircleQuestion />
-            </Tooltip>
           </label>
           <p className="text-sm text-gray-500 mb-3">
             How your name will appear to other users on the platform
@@ -259,11 +251,8 @@ const PersonalInfo = () => {
 
         {/* Phone Number */}
         <div className="flex flex-col justify-between">
-          <label className="flex items-center gap-1 block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Phone Number
-               <Tooltip title="First, click the phone-with-globe icon to select your country. This will automatically insert your country code. Then enter your phone number, starting with the appropriate regional or local code for your number.">
-              <CiCircleQuestion />
-            </Tooltip>
           </label>
           <p className="text-sm text-gray-500 mb-3">
             Primary contact number for account verification
@@ -392,7 +381,7 @@ const PersonalInfo = () => {
             Bio
           </label>
           <p className="text-sm text-gray-500 mb-3">
-            Tell others about yourself, your aviation interests, and experiences. Please omit any identifying info, contact info, websites, etc.
+            Tell others about yourself, your aviation interests, and experiences
           </p>
           <Controller
             name="bio"

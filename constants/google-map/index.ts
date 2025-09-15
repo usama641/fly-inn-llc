@@ -193,7 +193,7 @@ export const stays = [
   {
     id: "stay-001",
     lat: 34.0522, // Latitude for Los Angeles, CA
-    lng: -118.2437, // Longitude for Los Angeles, CA
+    googleMapsApiKeylng: -118.2437, // Longitude for Los Angeles, CA
     name: "Spacious Downtown Loft",
     pricePerNight: 180,
     rating: 4.7,

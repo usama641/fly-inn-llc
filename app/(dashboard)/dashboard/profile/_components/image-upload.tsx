@@ -39,7 +39,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [compressingLogo, setCompressingLogo] = useState(false);
-
   // Convert value to fileList format
   useEffect(() => {
     if (value) {
@@ -48,7 +47,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         setFileList([
           {
             uid: "-1",
-            name: "logo.png",
+            name: fieldName,
             status: "done",
             url: value,
             thumbUrl: value,

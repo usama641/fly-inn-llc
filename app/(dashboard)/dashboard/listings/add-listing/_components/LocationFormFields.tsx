@@ -315,7 +315,7 @@ const LocationFormFields = () => {
       {/* Map Section */}
       <div className="mt-8">
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gsray-700 mb-2">
             Location Map
           </label>
           <p className="text-sm text-gray-500 mb-3">
@@ -325,7 +325,7 @@ const LocationFormFields = () => {
         </div>
 
         <div className="h-[400px] w-full overflow-hidden rounded-lg border border-gray-300 shadow-sm">
-          <GoogleMapComponent height="h-[400px]" />
+          <GoogleMapComponent height="h-[400px]" stayMark="false"/>
         </div>
       </div>
 

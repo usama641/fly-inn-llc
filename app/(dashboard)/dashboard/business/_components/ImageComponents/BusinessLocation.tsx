@@ -326,7 +326,7 @@ const BusinessLocation = () => {
         </div>
 
         <div className="h-[400px] w-full overflow-hidden rounded-lg border border-gray-300 shadow-sm">
-          <GoogleMapComponent height="h-[400px]" />
+          <GoogleMapComponent height="h-[400px]" stayMark="false"/>
         </div>
       </div>
 

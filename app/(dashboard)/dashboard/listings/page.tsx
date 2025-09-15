@@ -52,13 +52,13 @@ const StaysListingPage = () => {
   const [open, setOpen] = useState(true)
 
   const { data: staysData = [], refetch } = useApiGet({
-    endpoint: "/stays",
-    queryKey: ["stays", selectedStatus],
-    config: { select: (res) => res?.data?.stays || [] },
+    endpoint: "/stay",
+    queryKey: ["stay", selectedStatus],
+    config: { select: (res) => res?.data?.docs || [] },
   });
 
   const { mutate: deleteStay, isPending: deletingStay } = useApiMutation({
-    endpoint: `/stays/${selectedStay?.id}`,
+    endpoint: `/stay/${selectedStay?.id}`,
     method: "delete",
     config: {
       onSuccess: () => {
@@ -73,7 +73,7 @@ const StaysListingPage = () => {
   });
 
   const { mutate: toggleStayStatus, isPending: togglingStatus } = useApiMutation({
-    endpoint: `/stays/${selectedStay?.id}/toggle-status`,
+    endpoint: `/stay/${selectedStay?.id}/toggle-status`,
     method: "patch",
     config: {
       onSuccess: () => {
@@ -127,29 +127,25 @@ const StaysListingPage = () => {
       },
       size: 100,
     },
+  {
+    accessorKey: "stay_title",
+    header: "Stay Title",
+    Cell: ({ cell }) => (
+      <Tooltip title={cell.getValue<string>()}>
+        <span className="truncate block max-w-xs">{cell.getValue<string>()}</span>
+      </Tooltip>
+    ),
+  },
+  {
+    accessorKey: "stay_type",
+    header: "Stay Type",
+    Cell: ({ cell }) => <Tag color="purple">{cell.getValue<string>()}</Tag>,
+  },
     {
-      accessorKey: "title",
-      header: "Title",
-      Cell: ({ cell }) => (
-        <Tooltip title={cell.getValue<string>()}>
-          <span className="truncate block max-w-xs">{cell.getValue<string>()}</span>
-        </Tooltip>
-      ),
-      size: 200,
-    },
-    {
-      accessorKey: "listing_type",
-      header: "Stay Type",
-      Cell: ({ cell }) => <Tag color="blue">{cell.getValue<string>()}</Tag>,
-      size: 140,
-    },
-    {
-      accessorKey: "lodging_type",
+      accessorKey: "space_type",
       header: "Lodging Type",
-    },
-    {
-      accessorKey: "type_of_space",
-      header: "Space Type",
+    Cell: ({ cell }) => <Tag color="green">{cell.getValue<string>()}</Tag>,
+
     },
     {
       accessorKey: "nightly_price",
@@ -249,7 +245,7 @@ const StaysListingPage = () => {
     },
   ];
 
-  const filteredData = staysData.filter((stay: StayListing) => {
+  const filteredData = staysData?.filter((stay: StayListing) => {
     if (selectedStatus === "all") return true;
     if (selectedStatus === "published") return stay.status === 1 && stay.is_disable === 0;
     if (selectedStatus === "pending") return stay.status === 0 && stay.is_disable === 0;
@@ -317,7 +313,7 @@ const StaysListingPage = () => {
             { value: 25, label: "25" },
             { value: 50, label: "50" },
             { value: 100, label: "100" },
-            { value: filteredData.length, label: "All" },
+            { value: filteredData?.length, label: "All" },
           ],
         }}
         positionActionsColumn="last"

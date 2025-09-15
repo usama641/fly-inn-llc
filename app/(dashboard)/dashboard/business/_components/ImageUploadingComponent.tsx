@@ -69,9 +69,10 @@ const ImageUploadingComponent: React.FC<ImageUploadingComponentProps> = ({
 
             return {
               id: img.id,
-              data_url: fullImageUrl,
+              image: fullImageUrl,
               file: null,
               description: img.description || "",
+              sort_order: 1,
               type: img.type || "photo",
             };
           }
@@ -124,8 +125,9 @@ const ImageUploadingComponent: React.FC<ImageUploadingComponentProps> = ({
         });
 
         processedImages.push({
-          data_url: dataUrl,
-          file: fileToProcess,
+          image: fileToProcess,
+          // file: fileToProcess,
+          sort_order: 1,
         });
       } else {
         processedImages.push(imageItem as ExtendedImageType);

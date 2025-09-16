@@ -284,16 +284,12 @@ const DriverLicense = () => {
             </div>
           </div>
 
-          <div className="mb-4">
+          <div className="w-full flex items-center gap-4 mb-4">
+
+          <div className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Driver License Front *
             </label>
-
-                        <div className="bg-[#E9E9E9] h-[221px] flex flex-col gap-2 justify-center items-center rounded-md">
-                          <PiUploadDuotone className="h-[40px] w-[40px]" />
-                          <span>Click or Drag Photo to Upload Image</span>
-                        </div>
-          
 
             <Controller
               name="driving_license_front"
@@ -330,18 +326,10 @@ const DriverLicense = () => {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Driver License Back *
             </label>
-
-            
-                        <div className="bg-[#E9E9E9] h-[221px] flex flex-col gap-2 justify-center items-center rounded-md">
-                          <PiUploadDuotone className="h-[40px] w-[40px]" />
-                          <span>Click or Drag Photo to Upload Image</span>
-                        </div>
-          
-
 
             <Controller
               name="driving_license_back"
@@ -376,6 +364,8 @@ const DriverLicense = () => {
                 );
               }}
             />
+          </div>
+
           </div>
 
           {/* File Requirements Info */}

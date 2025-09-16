@@ -31,7 +31,6 @@ export default function SignupPage() {
 
   const onSubmit = (data: { otp: string }) => {
     // TODO: Replace with your OTP verification logic
-    console.log("OTP submitted:", data.otp);
   };
 
   return (

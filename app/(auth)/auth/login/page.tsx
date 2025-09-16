@@ -172,7 +172,6 @@ const LoginPage: React.FC = () => {
                     visibilityToggle={{ visible: passwordVisible }}
                     onChange={(e) => {
                       field.onChange(e);
-                      setPasswordVisible(false);
                     }}
                   />
                 )}

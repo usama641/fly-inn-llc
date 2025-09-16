@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import imageCompression from "browser-image-compression";
 import { UploadOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
-import { Upload, Modal, Image, Spin, Button } from "antd";
+import { Upload, Modal, Spin, Button } from "antd";
 import type { UploadProps, UploadFile } from "antd";
+import { PiUploadDuotone } from "react-icons/pi";
+import Image from "next/image";
+
 
 type ImageUploadProps = {
   value: string | File | null;
@@ -150,8 +153,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     },
     itemRender: (originNode, file, fileList, actions) => {
       return (
-        <div className="flex items-center mt-2 justify-between bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3 hover:border-blue-300 transition-all duration-200">
-          {/* Left side - Image and info */}
+      <>
+        {/* <div className="flex items-center mt-2 justify-between bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3 hover:border-blue-300 transition-all duration-200">
           <div className="flex items-center gap-3">
             <Image
               src={file.url || file.thumbUrl}
@@ -185,7 +188,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             </div>
           </div>
 
-          {/* Right side - Action buttons */}
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -196,24 +198,33 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <DeleteOutlined className="text-xs" />
             </button>
           </div>
-        </div>
+        </div> */}
+      </>
       );
     },
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <Upload {...uploadProps} className="[&>div]:w-full">
-        <Button
-          type="primary"
-          icon={<UploadOutlined />}
-          className="w-full h-12 text-base font-medium"
-        >
-          <span className="text-sm">
-            {fileList.length > 0 ? `Replace ${label}` : `Upload ${label}`}
-          </span>
-        </Button>
-      </Upload>
+     <Upload {...uploadProps} className="[&>div]:w-full">
+  {fileList.length > 0 ? (
+    <div className="h-[400px] w-full flex justify-center items-center bg-white rounded-md py-3">
+      <Image
+        src={fileList[0]?.url || fileList[0]?.thumbUrl}
+        alt={fileList[0]?.name}
+        width={500}
+        height={400}
+        className="object-cover rounded-md max-h-[400px]"
+      />
+    </div>
+  ) : (
+    <div className="bg-[#E9E9E9] h-[400px] flex flex-col gap-2 justify-center items-center rounded-md cursor-pointer">
+      <PiUploadDuotone className="h-[40px] w-[40px]" />
+      <span>Click or Drag Photo to Upload Image</span>
+    </div>
+  )}
+</Upload>
+
 
       {/* Compression Modal */}
       <Modal

@@ -15,7 +15,6 @@ import { useProfileContext } from "./profile-context";
 import { useApiGet, useApiMutation } from "@/http-service";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { PiUploadDuotone } from "react-icons/pi";
 
 type DocumentStatus =
   | "not-submitted"
@@ -269,13 +268,6 @@ const AirmenCertifications = () => {
               Airmen Certificate Front *
             </label>
 
-            <div className="bg-[#E9E9E9] h-[221px] flex flex-col gap-2 justify-center items-center rounded-md">
-              <PiUploadDuotone className="h-[40px] w-[40px]" />
-              <span>Click or Drag Photo to Upload Image</span>
-            </div>
-
-
-
             <Controller
               name="airmen_certificate_front"
               control={airmenForm.control}
@@ -314,13 +306,6 @@ const AirmenCertifications = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Airmen Certificate Back *
             </label>
-
-            <div className="bg-[#E9E9E9] h-[221px] flex flex-col gap-2 justify-center items-center rounded-md">
-              <PiUploadDuotone className="h-[40px] w-[40px]" />
-              <span>Click or Drag Photo to Upload Image</span>
-            </div>
-
-
 
             <Controller
               name="airmen_certificate_back"

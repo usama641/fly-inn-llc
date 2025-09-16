@@ -30,7 +30,6 @@ export default function EditUser({ user }: EditUserProps) {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState('');
 
-  // ✅ Validation Schema
   const validationSchema = Yup.object().shape({
     first_name: Yup.string().required('First Name is required'),
     last_name: Yup.string().required('Last Name is required'),
@@ -116,7 +115,6 @@ export default function EditUser({ user }: EditUserProps) {
     formState: { errors },
   } = methods;
 
-  // ✅ Mutations
   const { mutate: updateUser, isPending: updatingUser } = useApiMutation({
     endpoint: `/user/${params?.id}`,
     method: 'post',
@@ -149,7 +147,6 @@ export default function EditUser({ user }: EditUserProps) {
     },
   });
 
-  // ✅ Handle FormData
   const appendFormData = useCallback((formData: FormData, data: any, parentKey = '') => {
     if (data === null || data === undefined || (typeof data === 'string' && data.trim() === '')) {
       return;
@@ -170,8 +167,7 @@ export default function EditUser({ user }: EditUserProps) {
     }
   }, []);
 
-  // ✅ Submit
-  const onSubmit = useCallback(
+    const onSubmit = useCallback(
     async (values: any) => {
       const { image, ...rest } = values;
       const formData = new FormData();

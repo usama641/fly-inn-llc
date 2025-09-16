@@ -30,8 +30,8 @@ const ProfileContent = () => {
               <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className=" flex flex-col gap-6">
 
-            {/* Certifications */}
-            <Certifications />
+                  {/* Certifications */}
+                  <Certifications />
                   {/* Personal Information */}
                   <PersonalInfo />
 

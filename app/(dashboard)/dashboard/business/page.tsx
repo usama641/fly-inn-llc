@@ -163,7 +163,7 @@ const BusinessPage = () => {
                     </Space>
                   ),
                   onClick: () =>
-                    router.push(`/dashboard/business/edit/${record.id}`),
+                    router.push(`/dashboard/business/${record.id}`),
                 },
                 {
                   key: "delete",

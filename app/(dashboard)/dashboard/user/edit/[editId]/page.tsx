@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Row, Col, Card, Button, Typography, Modal, notification } from 'antd';
 import { MdError } from 'react-icons/md';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
@@ -16,6 +16,7 @@ import SocialMediaSection from '../../_components/SocialMediaSection';
 import EmergencyContactSection from '../../_components/EmergencyContactSection';
 import ImageUploader from '../../_components/UploadAvatar';
 import InformationSection from '../../_components/InformationSection';
+import { useApp } from '@/providers/AppMessageProvider';
 
 const { Title, Text } = Typography;
 
@@ -24,16 +25,41 @@ interface EditUserProps {
 }
 
 export default function EditUser({ user }: EditUserProps) {
-  const params = useParams();
   const queryClient = useQueryClient();
+    const { message: appMessage } = useApp();
+
 
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState('');
 
+  const { editId } = useParams();
+
+// Fetch
+const { data: userData } = useApiGet({
+  endpoint: `/user/${editId}`,
+  queryKey: ["user", editId],
+});
+
+  const { mutate: updateUser, isPending: updatingUser } =
+    useApiMutation({
+      endpoint: `/user/${editId}`,
+      method: "patch",
+      config: {
+        onSuccess: () => {
+          appMessage.success("User updated successfully!");
+        },
+        onError: (err) => {
+          appMessage.error(
+            err?.response?.data?.message || "Failed to update user"
+          );
+        },
+      },
+    });
+
+
   const validationSchema = Yup.object().shape({
     first_name: Yup.string().required('First Name is required'),
     last_name: Yup.string().required('Last Name is required'),
-    username: Yup.string().required('User Name is required'),
     display_name: Yup.string().required('Display Name is required'),
     phone: Yup.string()
       .required('Phone is required')
@@ -46,65 +72,60 @@ export default function EditUser({ user }: EditUserProps) {
     image: Yup.mixed().required('Profile image is required'),
   });
 
-    const { data: userData, isLoading: loadingUser } = useApiGet({
-    endpoint: `/user/${params?.editId}`,
-    queryKey: ["user", params?.editId],
-  });
-
   const userInfo = userData?.doc || {};
 
-  console.log("userInfo", userInfo);
+  console.log("userInfo", userData);
 
 
-  const methods = useForm({
-    mode: "onChange",
-    resolver: yupResolver(validationSchema),
-    defaultValues: {
-      first_name: userInfo?.first_name,
-      middle_name: "",
-      last_name: userInfo?.last_name ,
-      display_name: userInfo?.display_name,
-      native_language: userInfo?.native_language,
-      other_language: userInfo?.other_language ,
-      phone: userInfo?.phone ,
-      other_phone: userInfo?.other_phone,
-      email: userInfo?.email ,
-      additional_email: "",
-      airmen_certificate_front: "",
-      airmen_certificate_back: "",
-      driving_license_verified: false,
-      id_verified: false,
-      email_verified: false,
-      provider: "",
-      role: [],
-      photo: userInfo?.photo,
-      image: userInfo?.photo,
-      complete_percentage: {
-        percentage: 0,
-        complete: 0,
-        remaining: 0,
-        completed_fields: [],
-        remaining_fields: [],
-      },
-      profile_status: "",
-      mailing_address: {
-        address: "",
-        city: "",
-        state: "",
-        zip_code: "",
-        country: "",
-      },
-      contact: {
-        name: "",
-        relationship: "",
-        email: "",
-        phone: "",
-      },
-      bio: "",
-      createdAt: "",
-      updatedAt: "",
+const methods = useForm({
+  mode: "onChange",
+  resolver: yupResolver(validationSchema),
+  defaultValues: {
+    first_name: userInfo?.first_name || "",
+    middle_name: userInfo?.middle_name || "",
+    last_name: userInfo?.last_name || "",
+    display_name: userInfo?.display_name || "",
+    native_language: userInfo?.native_language || "",
+    other_language: userInfo?.other_language || [],
+    phone: userInfo?.phone || "",
+    other_phone: userInfo?.other_phone || "",
+    email: userInfo?.email || "",
+    additional_email: "",
+    airmen_certificate_front: userInfo?.airmen_certificate_front || "",
+    airmen_certificate_back: userInfo?.airmen_certificate_back || "",
+    driving_license_verified: userInfo?.driving_license_verified || false,
+    id_verified: userInfo?.id_verified || false,
+    email_verified: userInfo?.email_verified || false,
+    provider: userInfo?.provider || "",
+    role: userInfo?.role || [],
+    photo: userInfo?.photo || "",
+    image: userInfo?.photo || "",
+    complete_percentage: userInfo?.complete_percentage || {
+      percentage: 0,
+      complete: 0,
+      remaining: 0,
+      completed_fields: [],
+      remaining_fields: [],
     },
-  });
+    profile_status: userInfo?.profile_status || "",
+    mailing_address: userInfo?.mailing_address || {
+      address: "",
+      city: "",
+      state: "",
+      zip_code: "",
+      country: "",
+    },
+    contact: userInfo?.contact || {
+      name: "",
+      relationship: "",
+      email: "",
+      phone: "",
+    },
+    bio: userInfo?.bio || "",
+    createdAt: userInfo?.createdAt || "",
+    updatedAt: userInfo?.updatedAt || "",
+  },
+});
 
   const {
     handleSubmit,
@@ -115,21 +136,56 @@ export default function EditUser({ user }: EditUserProps) {
     formState: { errors },
   } = methods;
 
-  const { mutate: updateUser, isPending: updatingUser } = useApiMutation({
-    endpoint: `/user/${params?.id}`,
-    method: 'post',
-    config: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['user', params?.id] });
-        notification.success({ message: 'User updated successfully' });
+  useEffect(() => {
+  if (userInfo) {
+    reset({
+      first_name: userInfo?.first_name || "",
+      middle_name: userInfo?.middle_name || "",
+      last_name: userInfo?.last_name || "",
+      display_name: userInfo?.display_name || "",
+      native_language: userInfo?.native_language || "",
+      other_language: userInfo?.other_language || [],
+      phone: userInfo?.phone || "",
+      other_phone: userInfo?.other_phone || "",
+      email: userInfo?.email || "",
+      additional_email: "",
+      airmen_certificate_front: userInfo?.airmen_certificate_front || "",
+      airmen_certificate_back: userInfo?.airmen_certificate_back || "",
+      driving_license_verified: userInfo?.driving_license_verified || false,
+      id_verified: userInfo?.id_verified || false,
+      email_verified: userInfo?.email_verified || false,
+      provider: userInfo?.provider || "",
+      role: userInfo?.role || [],
+      photo: userInfo?.photo || "",
+      image: userInfo?.photo || "",
+      complete_percentage: userInfo?.complete_percentage || {
+        percentage: 0,
+        complete: 0,
+        remaining: 0,
+        completed_fields: [],
+        remaining_fields: [],
       },
-      onError: (err) => {
-        notification.error({
-          message: err?.response?.data?.message || 'Failed to update user',
-        });
+      profile_status: userInfo?.profile_status || "",
+      mailing_address: userInfo?.mailing_address || {
+        address: "",
+        city: "",
+        state: "",
+        zip_code: "",
+        country: "",
       },
-    },
-  });
+      contact: userInfo?.contact || {
+        name: "",
+        relationship: "",
+        email: "",
+        phone: "",
+      },
+      bio: userInfo?.bio || "",
+      createdAt: userInfo?.createdAt || "",
+      updatedAt: userInfo?.updatedAt || "",
+    });
+  }
+}, [userInfo, reset]);
+
 
   const { mutate: updateProfile, isPending: updatingProfile } = useApiMutation({
     endpoint: `/profile`,
@@ -170,14 +226,39 @@ export default function EditUser({ user }: EditUserProps) {
     const onSubmit = useCallback(
     async (values: any) => {
       const { image, ...rest } = values;
-      const formData = new FormData();
-      formData.append('_method', 'PUT');
-      if (image instanceof File) formData.append('image', image);
-      appendFormData(formData, rest);
-      user === 'admin' ? updateProfile(formData) : updateUser(formData);
-    },
-    [appendFormData, updateProfile, updateUser, user]
-  );
+
+      const payload = {
+        mailing_address:{
+          address:rest.address,city:rest.city,state: rest.state,country:rest.country,zip_code:rest.zip_code
+        },
+        contact:{
+          name: rest.contact_name,
+          relationship: rest.contact_relationship,
+          email: rest.contact_email,
+          phone: rest.contact_phone,
+        },
+        social_links:{
+          facebook_url:rest.facebook_url,
+          instagram_url:rest.instagram_url,
+          linkedin_url:rest.linkedin_url,
+          airbnb_url:rest.airbnb_url,
+          youtube_url:rest.youtube_url,
+          twitter_url:rest.twitter_url,
+          vimeo_url:rest.vimeo_url,
+          vrbo_url:rest.google_plus_url,
+          pinterest_url:rest.pinterest_url,
+
+        }
+      }
+
+
+      const formData =  new FormData();
+      if (image instanceof File) formData.append('photo', image);
+         appendFormData(formData, payload);
+        updateUser(formData);
+      },
+        [appendFormData, updateUser, user]
+    );
 
   const onError = (errs: any) => {
     const firstError = Object.keys(errs)[0];
@@ -242,7 +323,7 @@ export default function EditUser({ user }: EditUserProps) {
                     <Button
                       type="primary"
                       htmlType="submit"
-                      loading={updatingUser || updatingProfile}
+                      loading={updatingUser}
                     >
                       Save
                     </Button>

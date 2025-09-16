@@ -166,7 +166,7 @@ const TermsAndRules: React.FC = () => {
                     )
                     ?.map((option: CancellationPolicy) => (
                       <Option key={option.id} value={option.id}>
-                        {option.name}: {option.before}
+                        {option.title} : {option.before}
                       </Option>
                     ))}
                 </Select>

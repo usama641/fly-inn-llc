@@ -1269,7 +1269,7 @@ export const bookingsFilterType = [
 
 export const addListingValidationSchema = yup.object().shape({
   is_draft: yup.boolean().required("Draft status is required."),
-  host_id: yup.number().required("Host ID is required."),
+  // host_id: yup.number().required("Host ID is required."),
   listing_type: yup.string().required("Listing type is required."),
 
   // Location fields
@@ -1277,13 +1277,13 @@ export const addListingValidationSchema = yup.object().shape({
   unit_no: yup.string().notRequired().nullable(),
   city: yup.string().required("City is required."),
   state: yup.string().required("State is required."),
-  zipcode: yup.string().required("ZIP / Postal Code is required."),
+  zipcode: yup.string().required("ZIP / Postal Codse is required."),
   area: yup.string().notRequired().nullable(),
   country: yup.string().required("Country is required."),
   // longitude: yup.string().required("Longitude is required."),
   // latitude: yup.string().required("Latitude is required."),
-  lng: yup.number().optional("Longitude is required."),
-  lat: yup.number().optional("Latitude is required."),
+  lng: yup.number().notRequired().nullable(),
+  lat: yup.number().notRequired().nullable(),
 
   // Media Section
   images: yup
@@ -1376,91 +1376,91 @@ export const addListingValidationSchema = yup.object().shape({
   ),
 
   // Airports section
-  airports: yup.array().of(
-    yup.object().shape({
-      airport_identifier: yup.string().required("Identifier is required."),
-      airport_name: yup.string().required("Airport name is required."),
-      airport_use: yup.string().required("Airport use is required."),
-      operation_hours: yup.string().required("Operation hour is required."),
-      lighting: yup
-        .number()
-        .oneOf([0, 1], "Invalid value for lighting")
-        .required("This field is required."),
-      ctaf_unicom: yup.string().required("CTAF/UNICOM is required."),
-      fuel: yup
-        .array()
-        .of(yup.string().required("Fuel must be a string."))
-        .min(1, "At least one option is required."),
-      surface: yup
-        .array()
-        .of(yup.string().required("Surface must be a string."))
-        .min(1, "At least one option is required."),
-      parking: yup.string().required("Parking is required."),
-      orientation: yup
-        .string()
-        .matches(/^\d{2}\/\d{2}$/, "Orientation must be in the format XX/XX")
-        .notRequired()
-        .nullable(),
-      runway_condition: yup.string().notRequired().nullable(),
-      pattern: yup.string().required("Pattern is required."),
-      distance_from_runway: yup
-        .string()
-        .required("Distance from runway is required.")
-        .transform((value, originalValue) =>
-          originalValue === "" ? undefined : value
-        ),
-      air_nav: yup.string().notRequired().nullable(),
-      ground_transportation: yup
-        .string()
-        .required("Ground transportation is required."),
+  // airports: yup.array().of(
+  //   yup.object().shape({
+  //     airport_identifier: yup.string().required("Identifier is required."),
+  //     airport_name: yup.string().required("Airport name is required."),
+  //     airport_use: yup.string().required("Airport use is required."),
+  //     operation_hours: yup.string().required("Operation hour is required."),
+  //     lighting: yup
+  //       .number()
+  //       .oneOf([0, 1], "Invalid value for lighting")
+  //       .required("This field is required."),
+  //     ctaf_unicom: yup.string().required("CTAF/UNICOM is required."),
+  //     fuel: yup
+  //       .array()
+  //       .of(yup.string().required("Fuel must be a string."))
+  //       .min(1, "At least one option is required."),
+  //     surface: yup
+  //       .array()
+  //       .of(yup.string().required("Surface must be a string."))
+  //       .min(1, "At least one option is required."),
+  //     parking: yup.string().required("Parking is required."),
+  //     orientation: yup
+  //       .string()
+  //       .matches(/^\d{2}\/\d{2}$/, "Orientation must be in the format XX/XX")
+  //       .notRequired()
+  //       .nullable(),
+  //     runway_condition: yup.string().notRequired().nullable(),
+  //     pattern: yup.string().required("Pattern is required."),
+  //     distance_from_runway: yup
+  //       .string()
+  //       .required("Distance from runway is required.")
+  //       .transform((value, originalValue) =>
+  //         originalValue === "" ? undefined : value
+  //       ),
+  //     air_nav: yup.string().notRequired().nullable(),
+  //     ground_transportation: yup
+  //       .string()
+  //       .required("Ground transportation is required."),
 
-      additional_info: yup.string().notRequired().nullable(),
+  //     additional_info: yup.string().notRequired().nullable(),
 
-      helicopter_allowed: yup
-        .number()
-        .oneOf([0, 1], "Invalid value for helicopter allowed")
-        .required("This field is required."),
+  //     helicopter_allowed: yup
+  //       .number()
+  //       .oneOf([0, 1], "Invalid value for helicopter allowed")
+  //       .required("This field is required."),
 
-      dimension_feetX: yup
-        .number()
-        .transform((value, originalValue) =>
-          originalValue === "" ? undefined : value
-        )
-        .required("This field is required."),
-      dimension_feetY: yup
-        .number()
-        .transform((value, originalValue) =>
-          originalValue === "" ? undefined : value
-        )
-        .required("This field is required."),
-      dimension_metersX: yup
-        .number()
-        .transform((value, originalValue) =>
-          originalValue === "" ? undefined : value
-        )
-        .required("This field is required."),
-      dimension_metersY: yup
-        .number()
-        .transform((value, originalValue) =>
-          originalValue === "" ? undefined : value
-        )
-        .required("This field is required."),
+  //     dimension_feetX: yup
+  //       .number()
+  //       .transform((value, originalValue) =>
+  //         originalValue === "" ? undefined : value
+  //       )
+  //       .required("This field is required."),
+  //     dimension_feetY: yup
+  //       .number()
+  //       .transform((value, originalValue) =>
+  //         originalValue === "" ? undefined : value
+  //       )
+  //       .required("This field is required."),
+  //     dimension_metersX: yup
+  //       .number()
+  //       .transform((value, originalValue) =>
+  //         originalValue === "" ? undefined : value
+  //       )
+  //       .required("This field is required."),
+  //     dimension_metersY: yup
+  //       .number()
+  //       .transform((value, originalValue) =>
+  //         originalValue === "" ? undefined : value
+  //       )
+  //       .required("This field is required."),
 
-      elevation_feets: yup
-        .number()
-        .transform((value, originalValue) =>
-          originalValue === "" ? undefined : value
-        )
-        .required("Airport Elevation is required."),
+  //     elevation_feets: yup
+  //       .number()
+  //       .transform((value, originalValue) =>
+  //         originalValue === "" ? undefined : value
+  //       )
+  //       .required("Airport Elevation is required."),
 
-      elevation_meters: yup
-        .number()
-        .transform((value, originalValue) =>
-          originalValue === "" ? undefined : value
-        )
-        .required("Airport Elevation is required."),
-    })
-  ),
+  //     elevation_meters: yup
+  //       .number()
+  //       .transform((value, originalValue) =>
+  //         originalValue === "" ? undefined : value
+  //       )
+  //       .required("Airport Elevation is required."),
+  //   })
+  // ),
   instant_booking: yup
     .boolean()
     .oneOf([true, false], "Invalid value...")
@@ -1764,8 +1764,8 @@ export const addListingDefaultValues = {
   zipcode: "",
   area: "",
   country: "",
-  lng: "",
-  lat: "",
+  lng: "34.88",
+  lat: "92.33",
   images: [],
   type_of_space: "",
   lodging_type: "",
@@ -1779,14 +1779,14 @@ export const addListingDefaultValues = {
   size: "",
   description: "",
   bedrooms: [],
-  helicopter_allowed: 0, // Changed to number to match schema
+  helicopter_allowed: 0, 
   airports: [airportDefaultValues],
   instant_booking: false,
   nightly_price: "",
   apply_weekend_price: "",
   weekend_nightly_price: "",
-  nightly_price_seven_plus: "",
-  nightly_price_thirty_plus: "",
+  nightly_price_seven_plus: null,
+  nightly_price_thirty_plus: null,
 
   additional_guest: 0, // Changed to number
   no_of_additional_guest: "",

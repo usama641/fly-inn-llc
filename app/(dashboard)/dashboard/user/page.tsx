@@ -133,7 +133,7 @@ const UserPage = () => {
       },
     },
     {
-      accessorKey: "driver_verification",
+      accessorKey: "driver_verification", 
       header: "Driver Verification",
       Cell: ({ row }: any) => {
         const record = row.original as User;

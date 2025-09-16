@@ -64,8 +64,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({
   const textInputFields = [
     { name: "first_name", label: "First Name" },
     { name: "last_name", label: "Last Name" },
-    { name: "username", label: "Username", disabled: true },
-    { name: "display_name", label: "Display Name" },
+    { name: "display_name", label: "Display Name",  disabled: true  },
     { name: "native_language", label: "Native / Fluent Languages" },
     { name: "other_language", label: "Other Languages" },
     { name: "email", label: "Email", type: "email", disabled: true },

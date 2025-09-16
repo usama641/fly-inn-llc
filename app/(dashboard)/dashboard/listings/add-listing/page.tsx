@@ -19,6 +19,7 @@ import ExtraServices from "./_components/ExtraServices";
 import Features from "./_components/Features";
 import TermsAndRules from "./_components/TermsAndRules";
 import BlockedDateCalender from "./_components/BlockedDateCalender";
+import PricingForm from "./_components/PricingForm";
 import {
   addListingDefaultValues,
   addListingValidationSchema,
@@ -45,7 +46,7 @@ const ListingPage = () => {
 
   // API mutation for creating/updating stays
   const { mutate: saveStay, isPending: savingStay } = useApiMutation({
-    endpoint: "/stays",
+    endpoint: "/stay",
     method: "post",
     config: {
       onSuccess: () => {
@@ -102,6 +103,7 @@ const ListingPage = () => {
               <AirportInformationFields />
               <PricingInformationFields />
               <ExtraServices />
+              <PricingForm />
               <Features />
               <TermsAndRules />
               <BlockedDateCalender />
@@ -111,13 +113,6 @@ const ListingPage = () => {
                 <div className="flex justify-end gap-4">
                   <Button onClick={() => router.back()} size="large">
                     Cancel
-                  </Button>
-                  <Button
-                    type="default"
-                    size="large"
-                    loading={savingStay || isSubmitting}
-                  >
-                    Save as Draft
                   </Button>
                   <Button
                     type="primary"

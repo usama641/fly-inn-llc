@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import imageCompression from "browser-image-compression";
 import { UploadOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
-import { Upload, Modal, Spin, Button } from "antd";
+import { Upload, Modal, Spin, Button, Image } from "antd";
 import type { UploadProps, UploadFile } from "antd";
 import { PiUploadDuotone } from "react-icons/pi";
-import Image from "next/image";
+// import Image from "next/image";
 
 
 type ImageUploadProps = {

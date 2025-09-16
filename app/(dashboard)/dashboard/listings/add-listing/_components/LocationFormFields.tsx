@@ -131,10 +131,10 @@ const LocationFormFields = () => {
                         setValue("zipcode", address.zipcode, {
                           shouldValidate: true,
                         });
-                        setValue("latitude", address.latitude, {
+                        setValue("lat", address.latitude, {
                           shouldValidate: true,
                         });
-                        setValue("longitude", address.longitude, {
+                        setValue("lng", address.longitude, {
                           shouldValidate: true,
                         });
                       }

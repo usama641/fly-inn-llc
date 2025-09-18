@@ -44,7 +44,6 @@ const BusinessPage = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null);
 
-  // ✅ Fetch all businesses
   const {
     data: businessData,
     isLoading,
@@ -53,7 +52,7 @@ const BusinessPage = () => {
     endpoint: `/business`,
     queryKey: ["business"],
     config: {
-      select: (res) => res?.data?.docs || [], // <-- return array instead of null
+      select: (res) => res?.data?.docs || [], 
     },
   });
 
@@ -163,7 +162,7 @@ const BusinessPage = () => {
                     </Space>
                   ),
                   onClick: () =>
-                    router.push(`/dashboard/business/${record.id}`),
+                    router.push(`/dashboard/listings/business/${record.id}`),
                 },
                 {
                   key: "delete",

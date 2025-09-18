@@ -1270,7 +1270,8 @@ export const bookingsFilterType = [
 export const addListingValidationSchema = yup.object().shape({
   is_draft: yup.boolean().required("Draft status is required."),
   // host_id: yup.number().required("Host ID is required."),
-  listing_type: yup.string().required("Listing type is required."),
+  // listing_type: yup.string().required("Listing type is required."),
+  listing_type: yup.string().optional(),
 
   // Location fields
   address: yup.string().required("Address is required."),

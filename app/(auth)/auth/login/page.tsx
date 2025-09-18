@@ -169,11 +169,9 @@ const LoginPage: React.FC = () => {
                     iconRender={(visible) =>
                       visible ? <EyeInvisibleOutlined /> : <EyeOutlined />
                     }
-                    visibilityToggle={{ visible: passwordVisible }}
-                    onChange={(e) => {
-                      field.onChange(e);
-                    }}
+                    onChange={(e) => field.onChange(e)}
                   />
+
                 )}
               />
               {errors.password && (

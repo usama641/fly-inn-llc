@@ -98,35 +98,28 @@ const items: MenuItem[] = [
     undefined,
     "/dashboard/profile"
   ),
-  // getItem(
-  //   "Listings",
-  //   "listings",
-  //   <HomeOutlined className="text-lg" />,
-  //   [
-  //     getItem(
-  //       "Stays",
-  //       "stays",
-  //       <HomeOutlined className="text-base" />,
-  //       undefined,
-  //       "/dashboard/listings/stays"
-  //     ),
-  //     getItem(
-  //       "Restaurants",
-  //       "restaurants",
-  //       <ApartmentOutlined className="text-base" />,
-  //       undefined,
-  //       "/dashboard/listings/restaurants"
-  //     ),
-  //   ],
-  //   "/dashboard/listings"
-  // ), 
-    getItem(
+  getItem(
     "Listings",
     "listings",
-    <CalendarOutlined className="text-lg" />,
+    <HomeOutlined className="text-lg" />,
+    [
+      getItem(
+        "Stays",
+        "stays",
+        <HomeOutlined className="text-base" />,
+        undefined,
+        "/dashboard/listings/stays"
+      ),
+  getItem(
+    "Business",
+    "business",
+    <ShopOutlined className="text-lg" />,
     undefined,
-    "/dashboard/listings"
+    "/dashboard/listings/business"
   ),
+    ],
+    "/dashboard/listings"
+  ), 
   getItem(
     "Bookings",
     "bookings",
@@ -147,13 +140,6 @@ const items: MenuItem[] = [
     <StarOutlined className="text-lg" />,
     undefined,
     "/dashboard/reviews"
-  ),
-  getItem(
-    "Business",
-    "business",
-    <ShopOutlined className="text-lg" />,
-    undefined,
-    "/dashboard/business"
   ),
   getItem(
     "Airmail",
@@ -349,9 +335,9 @@ const items: MenuItem[] = [
               onClick={() => setCollapsed(!collapsed)}
               className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
             />
-            <h1 className="ml-4 text-xl font-semibold text-gray-800 hidden md:block">
+            {/* <h1 className="ml-4 text-xl font-semibold text-gray-800 hidden md:block">
               {getTitleFromPath(pathname)}
-            </h1>
+            </h1> */}
           </div>
 
           <div className="flex items-center space-x-4">

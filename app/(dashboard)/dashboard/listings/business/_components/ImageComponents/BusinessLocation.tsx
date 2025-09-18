@@ -326,7 +326,14 @@ const BusinessLocation = () => {
         </div>
 
         <div className="h-[400px] w-full overflow-hidden rounded-lg border border-gray-300 shadow-sm">
-          <GoogleMapComponent height="h-[400px]" stayMark="false"/>
+        <GoogleMapComponent 
+          height="h-[400px]" 
+          stayMark="false"
+          latitude={parseFloat(latitude)}   
+          longitude={parseFloat(longitude)} 
+          onDragEnd={onDragEnd}
+          />
+
         </div>
       </div>
 

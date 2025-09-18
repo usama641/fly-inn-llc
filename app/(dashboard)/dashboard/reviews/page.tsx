@@ -42,7 +42,7 @@ const ReviewsPage = () => {
   const user_id = session?.user?.id;
 
 const { data: reviews } = useApiGet({
-  endpoint: `/review?guest=${user_id}&populate=["stay","guest"]`,
+  endpoint: `/review?guest=${user_id} `,
   queryKey: ["review", user_id],
   config: {
     select: (res) => res?.data?.docs as Review[],

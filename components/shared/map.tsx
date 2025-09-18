@@ -10,7 +10,7 @@ import {
 import Loading from "@/src/components/Loading";
 import { MAP_THEME, stays } from "@/constants/google-map";
 
-const center = { lat: 39.8283, lng: -98.5795 }; // Still need a center to show something
+// const center = { lat: 39.8283, lng: -98.5795 };
 interface CustomMarkerProps {
   position: { lat: number; lng: number };
   price: number;
@@ -26,7 +26,7 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
 }) => {
   const getPixelPositionOffset = useCallback(
     (offsetWidth: number, offsetHeight: number) => {
-      return { x: -(offsetWidth / 2), y: -offsetHeight }; // Centers horizontally, aligns bottom
+      return { x: -(offsetWidth / 2), y: -offsetHeight };
     },
     []
   );
@@ -50,7 +50,7 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
           }
         `}
         style={{
-          minWidth: "50px", // Ensure button has a minimum size
+          minWidth: "50px", 
           fontSize: "0.85rem",
           fontWeight: "600",
         }}
@@ -64,18 +64,20 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
 export default function GoogleMapComponent({
   height,
   mapClasses,
-  stayMark
+  stayMark,
+  latitude,
+  longitude
 }: {
   height: string;
   mapClasses?: any;
-  stayMark: boolean;
+  stayMark: bolean;
 }) {
 const { isLoaded, loadError } = useLoadScript({
   googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!,
   libraries: ["places"],
 });
 
-console.log("stay marlk", stayMark)
+  const center = useMemo(() => ({ lat: latitude || 39.8283, lng: longitude|| -98.5795 }), [latitude, longitude]);
 
   const [selectedStay, setSelectedStay] = useState<any>(null);
   // Basic map options, minimal to just get a map
@@ -117,7 +119,7 @@ console.log("stay marlk", stayMark)
         mapContainerClassName={`w-full h-full cursor-grab active:cursor-grabbing ${mapClasses}`}
         options={mapOptions}
       >
-        {stayMark === false &&(
+        {stayMark !== "false" &&(
           <div>
         {stays.map((stay) => (
           <CustomMarker

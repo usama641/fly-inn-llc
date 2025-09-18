@@ -75,7 +75,6 @@ interface BookingListing {
 export default function BookingDetails({ params }: { params: Params }) {
     const { bookingId } = React.use(params);
   const router = useRouter();
-  const id = "68bb5db0aa26bb004454c5e1";
 
   console.log("bookingIdsss", bookingId);
 
@@ -89,7 +88,7 @@ export default function BookingDetails({ params }: { params: Params }) {
 
   const { data: bookingDetails, isLoading } = useApiGet({
   endpoint: `/stay/booking/${bookingId}`,
-  queryKey: ["stay", id],
+  queryKey: ["stay", bookingId],
   config: {
     select: (res) => res?.data?.doc || null,
   },

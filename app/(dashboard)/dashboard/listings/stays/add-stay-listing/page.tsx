@@ -95,7 +95,7 @@ const ListingPage = () => {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit, onError)}>
             <div className="space-y-6">
-              <ListingFormFields />
+              {/* <ListingFormFields /> */}
               <LocationFormFields />
               <ImagesForm />
               <InformationFields />

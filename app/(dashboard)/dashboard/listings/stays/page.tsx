@@ -36,7 +36,6 @@ interface StayListing {
   no_of_bedrooms: number;
   no_of_bathrooms: string;
   no_of_guest: number;
-  size: number;
   unit_of_measure: string;
   is_disable: number;
   status: number;
@@ -170,17 +169,12 @@ const StaysListingPage = () => {
       header: "Guests",
     },
     {
-      accessorKey: "size",
-      header: "Size",
-      Cell: ({ row }) => `${row.original.size} ${row.original.unit_of_measure}`,
-    },
-    {
       accessorKey: "status",
       header: "Status",
       Cell: ({ row }) => {
         const { status, is_disable } = row.original;
         const text =
-          is_disable === 1 ? "Deactivated" : status === 1 ? "Published" : "Pending";
+          status === 0 ? "Pending" : status === 1 ? "Published" : status === 2 ? "Draft" : status === 3 ? "Featured" : status === 4 ? "Waiting Approval" : "Deactivated";
         const badgeStatus =
           is_disable === 1 ? "default" : status === 1 ? "success" : "warning";
         return <Badge status={badgeStatus as any} text={text} />;
@@ -247,9 +241,12 @@ const StaysListingPage = () => {
 
   const filteredData = staysData?.filter((stay: StayListing) => {
     if (selectedStatus === "all") return true;
-    if (selectedStatus === "published") return stay.status === 1 && stay.is_disable === 0;
-    if (selectedStatus === "pending") return stay.status === 0 && stay.is_disable === 0;
-    if (selectedStatus === "deactivated") return stay.is_disable === 1;
+    if (selectedStatus === "published") return stay.status === 1;
+    if (selectedStatus === "pending") return stay.status === 0 ;
+    if (selectedStatus === "drafts") return stay.status === 2 ;
+    if (selectedStatus === "featured") return stay.status === 3 ;
+    if (selectedStatus === "waiting approval") return stay.status === 4;
+    if (selectedStatus === "deactivated") return stay.status === 5;
     return true;
   });
 
@@ -258,26 +255,27 @@ const StaysListingPage = () => {
   { id: 1, title: "Published" },
   { id: 2, title: "Pending" },
   { id: 3, title: "Drafts" },
-  { id: 4, title: "Waiting Approval" },
-  { id: 5, title: "Deactivated" },
+  { id: 4, title: "Featured" },
+  { id: 5, title: "Waiting Approval" },
+  { id: 6, title: "Deactivated" },
 ];
 
 
   return (
     <div className="p-6 bg-white min-h-screen">
       <div className="flex justify-between items-center mb-6">
-        <div>
+        <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">Listing</h1>
-          <p className="text-gray-600">Manage your properties</p>
-        </div>
-        <Button
+          <p className="text-gray-600">Manage your properties.</p>
+             <Button
           type="primary"
           icon={<PlusOutlined />}
           className="bg-[#CE2029]"
-          onClick={() => router.push("/dashboard/listings/add-listing")}
+          onClick={() => router.push("/dashboard/listings/stays/add-stay-listing")}
         >
           Add Listing
         </Button>
+        </div>
       </div>
 
       {/* Filter Buttons */}

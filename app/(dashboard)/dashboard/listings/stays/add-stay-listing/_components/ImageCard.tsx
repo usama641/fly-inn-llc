@@ -176,7 +176,8 @@ export const ImageCard: React.FC<ImageCardProps> = ({
           </p>
           {image.description && (
             <p className="text-xs text-green-600 truncate mt-1">
-              ✓ Has description
+              {/* ✓ Has description */}
+             {"Description : "} {image.description}
             </p>
           )}
         </div>

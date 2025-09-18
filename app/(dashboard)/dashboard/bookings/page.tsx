@@ -67,8 +67,6 @@ const BookingPage = () => {
   const { data: session } = useSession();
   const { message: appMessage } = useApp();
 
-  console.log("session", session?.user?.role)
-
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedBooking, setSelectedBooking] = useState<BookingListing | null>(null);
   const [open, setOpen] = useState(true);
@@ -144,13 +142,14 @@ const BookingPage = () => {
   };
 
   const getStatusText = (status: number, isDisable: number) => {
-    if (isDisable === 1) return "Deactivated";
-    if (status === 1) return "Confirmed";
     if (status === 0) return "Pending";
+    if (status === 1) return "Completed";
+    if (status === 2) return "Cancelled";
+    if (status === 3) return "Awaiting Payment";
+
     return "Unknown";
   };
 
-  // MRT Columns
 // MRT Columns
 const mrtColumns: MRT_ColumnDef<BookingListing>[] = [
   {
@@ -244,6 +243,7 @@ const mrtColumns: MRT_ColumnDef<BookingListing>[] = [
   },
 ];
 
+console.log("bookingData", bookingData);
 
   const filteredData = bookingData?.filter((booking: BookingListing) => {
     if (selectedStatus === "all") return true;
@@ -259,20 +259,6 @@ const mrtColumns: MRT_ColumnDef<BookingListing>[] = [
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-3xl font-bold text-gray-900">Bookings</h1>
         </div>
-
-        {/* Filters */}
-        {/* <div className="bg-white rounded-lg shadow-sm p-6 mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-gray-700">Filter by Status:</span>
-            <Select value={selectedStatus} onChange={setSelectedStatus} className="w-40" size="large">
-              <Option value="all">All</Option>
-              <Option value="mine">Mine</Option>
-              <Option value="other">Others</Option>
-              <Option value="deactivated">Deactivated</Option>
-            </Select>
-          </div>
-          <div className="text-sm text-gray-500">{filteredData?.length || 0} bookings found</div>
-        </div> */}
 
         {/* Table */}
         <div className="bg-[#F9FAFB] rounded-lg shadow-sm overflow-hidden">

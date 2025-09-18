@@ -185,13 +185,14 @@ const items: MenuItem[] = [
     undefined,
     "/dashboard/payment"
   ),
-  getItem(
-    "Logout",
-    "logout",
-    <LogoutOutlined className="text-lg" />,
-    undefined,
-    "/dashboard/logout"
-  ),
+getItem(
+  "Logout",
+  "logout",
+  <LogoutOutlined className="text-lg" />,
+  undefined,
+  undefined
+),
+
 ];
 
 
@@ -313,6 +314,12 @@ const items: MenuItem[] = [
           selectedKeys={selectedKeys}
           openKeys={openKeys}
           onOpenChange={(keys) => setOpenKeys(keys as string[])}
+          onClick={async (e) => {
+            console.log("eeeeee:::", e)
+          if (e.key === "logout") {
+            await signOut({ callbackUrl: "/auth/login" });
+            }
+            }}
           items={items}
           className="px-2 py-4"
         />
